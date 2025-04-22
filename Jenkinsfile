@@ -2,34 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build('django-bookstore')
+                dir('D:/Bookstore2/bookstore_project') {
+                    script {
+                        docker.build("django-bookstore")
+                    }
                 }
             }
         }
 
         stage('Run Tests') {
             steps {
-                script {
-                    docker.image('django-bookstore').inside {
-                        sh 'python manage.py test'
+                dir('D:/Bookstore2/bookstore_project') {
+                    script {
+                        bat 'docker run --rm django-bookstore python manage.py test'
                     }
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy') 
+        {
             steps {
-                script {
-                    docker.image('django-bookstore').run('-p 8000:8000')
+                dir('D:/Bookstore2/bookstore_project') {
+                    script {
+                        bat 'docker-compose up -d'
+                    }
                 }
             }
         }
