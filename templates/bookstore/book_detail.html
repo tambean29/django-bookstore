@@ -1,0 +1,13 @@
+{% extends 'bookstore/base.html' %}
+{% block content %}
+<h2>{{ book.title }}</h2>
+<p><strong>Author:</strong> {{ book.author }}</p>
+<p><strong>Price:</strong> ${{ book.price }}</p>
+<p><strong>In Stock:</strong> {{ book.inventory }}</p>
+<p>{{ book.description }}</p>
+
+<form action="{% url 'add_to_cart' book.pk %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Add to Cart</button>
+</form>
+{% endblock %}

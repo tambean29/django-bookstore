@@ -1,0 +1,16 @@
+{% extends 'bookstore/base.html' %}
+{% block content %}
+<h2>Admin Dashboard</h2>
+<a href="{% url 'add_book' %}">Add New Book</a>
+<ul>
+    {% for book in books %}
+        <li>
+            {{ book.title }} - {{ book.author }}
+            <form method="post" action="{% url 'delete_book' book.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: bookstore_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: bookstore_db
+      MYSQL_USER: bookstore_user
+      MYSQL_PASSWORD: bookstore_pass
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "1024:3307"
+
+  web:
+    build: .
+    container_name: django_bookstore
+    command: > 
+      sh -c "/wait-for-it.sh db 3306 --
+           python manage.py migrate &&
+           python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
